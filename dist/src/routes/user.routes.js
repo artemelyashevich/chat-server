@@ -1,18 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_controller_1 = __importDefault(require("../controllers/user.controller"));
+const user_controller_1 = require("../controllers/user.controller");
 class UserRoutes {
     constructor() {
         this.router = (0, express_1.Router)();
-        this.controller = new user_controller_1.default();
+        this.controller = new user_controller_1.UserController();
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.post("/register", this.controller.register);
+        this.router.get("/users", this.controller.getAll);
+        this.router.get("/user", this.controller.getOne);
     }
     get gRouter() {
         return this.router;

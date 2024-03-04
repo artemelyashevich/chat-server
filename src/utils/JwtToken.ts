@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode"
 import {UserDTO} from "../types/dto/user.dto"
 import jwt from 'jsonwebtoken'
 
@@ -26,5 +27,12 @@ export default class Token {
                 expiresIn: String(process.env.REFRESH_TOKEN_LIFE)
             }
         )
+    }
+
+    public getData(token: string): string {
+        const encoded: string = (token || "").replace(/Bearer\s?/, '')
+        const decoded: string = jwtDecode(encoded)
+        console.log(decoded)
+        return decoded 
     }
 }

@@ -1,16 +1,17 @@
-import {UserResponseDTO} from "../../types/response/user.response.dto";
-import {AuthService} from "../auth.service";
-import userRepository from "../../entities/user";
-import {UserCreateDto} from "../../types/request/user.request.dto";
-import {HttpStatus} from "../../utils/HttpStatus";
-import {IError} from "../../types/error/error.type";
+import {UserResponseDTO} from "../../types/response/user.response.dto"
+import {AuthService} from "../auth.service"
+import userRepository from "../../entities/user"
+import {UserCreateDto} from "../../types/request/user.request.dto"
+import {HttpStatus} from "../../utils/HttpStatus"
+import {IError} from "../../types/error/error.type"
 import CryptoJs from 'crypto-js'
-import Token from "../../utils/JwtToken";
-import {UserDTO} from "../../types/dto/user.dto";
+import Token from "../../utils/JwtToken"
+import {UserDTO} from "../../types/dto/user.dto"
 
 const token = new Token()
 
 export class AuthServiceImpl implements AuthService {
+
     public async login(data: UserCreateDto): Promise<UserResponseDTO | IError> {
         const user: UserDTO | any = await userRepository.findOne({
             email: data.email

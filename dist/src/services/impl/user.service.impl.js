@@ -25,50 +25,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServiceImpl = void 0;
 const user_1 = __importDefault(require("../../entities/user"));
-const HttpStatus_1 = require("../../utils/HttpStatus");
-const crypto_js_1 = __importDefault(require("crypto-js"));
 const JwtToken_1 = __importDefault(require("../../utils/JwtToken"));
-const token = new JwtToken_1.default();
+const HttpStatus_1 = require("../../utils/HttpStatus");
+const tokenService = new JwtToken_1.default();
 class UserServiceImpl {
-    login(data) {
+    getOne(token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_1.default.findOne({
-                email: data.email
-            });
-            if (user === null) {
-                return (0, HttpStatus_1.HttpStatus)(404, "User with such email doesn't exist!");
+            const id = tokenService.getData(token);
+            console.log(id);
+            const user = user_1.default.findById(id);
+            if (!user) {
+                return (0, HttpStatus_1.HttpStatus)(404, "Not found");
             }
-            const decPassword = crypto_js_1.default
-                .AES
-                .decrypt(String(user.password), String(process.env.CRYPTO_SECRET));
-            const pass = decPassword.toString(crypto_js_1.default.enc.Utf8);
-            if (pass !== data.password) {
-                return (0, HttpStatus_1.HttpStatus)(400, "Incorrect password");
-            }
-            const _a = user._doc, { password, refresh_token } = _a, userData = __rest(_a, ["password", "refresh_token"]);
-            const session = Math.random() * 1000;
-            return Object.assign(Object.assign({}, userData), { access_token: token.getAccessToken(user, session) });
+            const { password, refresh_token } = user, userData = __rest(user, ["password", "refresh_token"]);
+            return userData;
         });
     }
-    register(data) {
+    remove(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let u = yield user_1.default.findOne({
-                email: data.email
+            throw new Error("Method not implemented.");
+        });
+    }
+    edit(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error("Method not implemented.");
+        });
+    }
+    getAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const users = yield user_1.default.find();
+            const res = [];
+            users.forEach((user) => {
+                let _a = user._doc, { password, refresh_token } = _a, userData = __rest(_a, ["password", "refresh_token"]);
+                res.push(userData);
             });
-            if (u !== null) {
-                return (0, HttpStatus_1.HttpStatus)(400, "User with such email already exist!");
-            }
-            const hashPassword = crypto_js_1.default
-                .AES
-                .encrypt(data.password, String(process.env.CRYPTO_SECRET))
-                .toString();
-            const session = Math.random() * 1000;
-            yield user_1.default.create(Object.assign(Object.assign({}, data), { password: hashPassword, refresh_token: token.getRefreshToken(session) }));
-            const user = yield user_1.default.findOne({
-                email: data.email
-            });
-            const _a = user._doc, { password, refresh_token } = _a, userData = __rest(_a, ["password", "refresh_token"]);
-            return Object.assign(Object.assign({}, userData), { access_token: token.getAccessToken(user, session) });
+            return res;
+        });
+    }
+    getOneByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error("Method not implemented.");
         });
     }
 }

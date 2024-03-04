@@ -9,14 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserController = void 0;
 const user_service_impl_1 = require("../services/impl/user.service.impl");
 const userService = new user_service_impl_1.UserServiceImpl();
 class UserController {
-    register(req, res) {
+    getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield userService.register(req.body);
-            res.status(201).json(user);
+            const users = yield userService.getAll();
+            res.status(200).json(users);
+        });
+    }
+    getOne(req, res) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const token = ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace(/Bearer\s?/, "")) || "";
+            const user = yield userService.getOne(token);
+            res.status(200).json(user);
         });
     }
 }
-exports.default = UserController;
+exports.UserController = UserController;
