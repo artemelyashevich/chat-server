@@ -4,3 +4,7 @@ export interface UserResponseDTO {
     email: string,
     access_token?: string
 }
+
+export interface IToken {
+    accessToken: string
+}

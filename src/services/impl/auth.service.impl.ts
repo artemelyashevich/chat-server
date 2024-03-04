@@ -1,4 +1,3 @@
-import {UserResponseDTO} from "../../types/response/user.response.dto"
 import {AuthService} from "../auth.service"
 import userRepository from "../../entities/user"
 import {UserCreateDto} from "../../types/request/user.request.dto"
@@ -6,13 +5,14 @@ import {HttpStatus} from "../../utils/HttpStatus"
 import {IError} from "../../types/error/error.type"
 import CryptoJs from 'crypto-js'
 import Token from "../../utils/JwtToken"
+import { IToken } from "../../types/response/user.response.dto"
 import {UserDTO} from "../../types/dto/user.dto"
 
 const token = new Token()
 
 export class AuthServiceImpl implements AuthService {
 
-    public async login(data: UserCreateDto): Promise<UserResponseDTO | IError> {
+    public async login(data: UserCreateDto): Promise<IToken | IError> {
         const user: UserDTO | any = await userRepository.findOne({
             email: data.email
         })
@@ -31,14 +31,12 @@ export class AuthServiceImpl implements AuthService {
             return HttpStatus(400, "Incorrect password")
         }
 
-        const {password, refresh_token,  ...userData} = user._doc
-
         const session: number = Math.random() * 1000
 
-        return {...userData, access_token: token.getAccessToken(user, session)}
+        return {accessToken: token.getAccessToken(user, session)}
     }
 
-    public async register(data: UserCreateDto): Promise<UserResponseDTO | IError> {
+    public async register(data: UserCreateDto): Promise<IToken | IError> {
         let u = await userRepository.findOne({
             email: data.email
         })
@@ -60,8 +58,6 @@ export class AuthServiceImpl implements AuthService {
             email: data.email
         })
 
-        const {password, refresh_token, ...userData} = user._doc
-
-        return {...userData, access_token: token.getAccessToken(user, session)}
+        return {accessToken: token.getAccessToken(user, session)}
     }
 }
