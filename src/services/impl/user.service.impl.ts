@@ -10,10 +10,9 @@ import { HttpStatus } from "../../utils/HttpStatus"
 const tokenService: Token = new Token() 
 
 export class UserServiceImpl implements UserService {
-    
+
     public async getOne(token: string): Promise<IError | UserResponseDTO> {
         const id: string = tokenService.getData(token)
-        console.log(id)
         const user: any = userRepository.findById(id)
         if (!user) {
             return HttpStatus(404, "Not found")
@@ -41,6 +40,7 @@ export class UserServiceImpl implements UserService {
     }
 
     public async getOneByEmail(email: string): Promise<UserResponseDTO | IError> {
+
         throw new Error("Method not implemented.")
     }
 }
