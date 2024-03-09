@@ -3,6 +3,7 @@ import cors from "cors"
 import mongoose from 'mongoose'
 import dotenv from "dotenv"
 import Routes from "./routes";
+import {errorHandler, notFound} from "./middleware/error.middleware";
 
 dotenv.config()
 
@@ -20,6 +21,8 @@ export default class Server {
     private config(): void {
         this.app.use(cors())
         this.app.use(express.json())
+        this.app.use(notFound)
+        this.app.use(errorHandler)
         mongoose
             .connect(String(process.env.MONGODB_URI))
             .then(() => console.log('Connected to mongodb'))

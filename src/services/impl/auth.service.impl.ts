@@ -16,22 +16,17 @@ export class AuthServiceImpl implements AuthService {
         const user: UserDTO | undefined | null = await userRepository.findOne({
             email: data.email
         });
-
         if (!user) {
             return HttpStatus(404, "User with such email doesn't exist!");
         }
-
         const decryptedPassword: string = CryptoJs.AES.decrypt(
             String(user.password),
             String(process.env.CRYPTO_SECRET)
         ).toString(CryptoJs.enc.Utf8);
-
         if (decryptedPassword !== data.password) {
             return HttpStatus(400, "Incorrect password");
         }
-
         const session: number = Math.random() * 1000;
-
         return { accessToken: token.getAccessToken(user, session) };
     }
 
@@ -39,32 +34,25 @@ export class AuthServiceImpl implements AuthService {
         const existingUser: UserDTO | undefined | null = await userRepository.findOne({
             email: data.email
         });
-
         if (existingUser) {
             return HttpStatus(400, "User with such email already exists!");
         }
-
         const encryptedPassword: string = CryptoJs.AES.encrypt(
             data.password,
             String(process.env.CRYPTO_SECRET)
         ).toString();
-
         const session: number = Math.random() * 1000;
-
         await userRepository.create({
             ...data,
             password: encryptedPassword,
             refresh_token: token.getRefreshToken(session)
         });
-
         const newUser: UserDTO | undefined | null = await userRepository.findOne({
             email: data.email
         });
-
         if (!newUser) {
             return HttpStatus(500, "Failed to create user");
         }
-
         return { accessToken: token.getAccessToken(newUser, session) };
     }
 }
