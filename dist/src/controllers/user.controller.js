@@ -11,20 +11,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const user_service_impl_1 = require("../services/impl/user.service.impl");
+const http2_1 = require("http2");
 const userService = new user_service_impl_1.UserServiceImpl();
 class UserController {
     getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const users = yield userService.getAll();
-            res.status(200).json(users);
+            res.status(http2_1.constants.HTTP_STATUS_OK).json(users);
         });
     }
-    getOne(req, res) {
+    getCurrentUser(req, res) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const token = ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace(/Bearer\s?/, "")) || "";
-            const user = yield userService.getOne(token);
-            res.status(200).json(user);
+            const user = yield userService.getCurrentUser(token);
+            res.status(http2_1.constants.HTTP_STATUS_OK).json(user);
+        });
+    }
+    removeAllData(req, res) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const token = ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace(/Bearer\s?/, "")) || "";
+            console.log(`\t ${req.body}`);
+            //await userService.removeAll()
+            res.status(http2_1.constants.HTTP_STATUS_NO_CONTENT);
         });
     }
 }

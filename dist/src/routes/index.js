@@ -5,9 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_routes_1 = __importDefault(require("./auth.routes"));
 const user_routes_1 = __importDefault(require("./user.routes"));
+const message_routes_1 = __importDefault(require("./message.routes"));
+const chat_routes_1 = __importDefault(require("./chat.routes"));
 class Routes {
     constructor(app) {
-        app.use(auth_routes_1.default, user_routes_1.default);
+        app.use(auth_routes_1.default, user_routes_1.default, message_routes_1.default, chat_routes_1.default);
     }
 }
 exports.default = Routes;

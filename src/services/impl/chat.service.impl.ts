@@ -1,5 +1,5 @@
 import { ChatDto } from "../../types/dto/chat.dto";
-import {ChatService} from "../chatService";
+import {ChatService} from "../chat.service";
 
 export class ChatServiceImpl implements ChatService {
     getAll(): ChatDto[] {

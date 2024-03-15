@@ -1,3 +1,5 @@
-export class MessageService implements MessageService {
+import {MessageService} from "../message.service";
+
+export class MessageServiceImpl implements MessageService {
 
 }

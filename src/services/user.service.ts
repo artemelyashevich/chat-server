@@ -11,5 +11,7 @@ export interface UserService {
 
     getOneByEmail(email: string): Promise<UserResponseDTO | IError>
 
-    getOne(token: string): Promise<UserResponseDTO | IError>
+    getCurrentUser(token: string): Promise<UserResponseDTO | IError>
+
+    removeAll(): Promise<void | IError>
 }

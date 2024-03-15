@@ -27,17 +27,17 @@ exports.UserServiceImpl = void 0;
 const user_1 = __importDefault(require("../../entities/user"));
 const JwtToken_1 = __importDefault(require("../../utils/JwtToken"));
 const HttpStatus_1 = require("../../utils/HttpStatus");
+const http2_1 = require("http2");
 const tokenService = new JwtToken_1.default();
 class UserServiceImpl {
-    getOne(token) {
+    getCurrentUser(token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = tokenService.getData(token);
-            console.log(id);
-            const user = user_1.default.findById(id);
+            const tokenData = tokenService.getData(token);
+            const user = yield user_1.default.findById(tokenData.id);
             if (!user) {
-                return (0, HttpStatus_1.HttpStatus)(404, "Not found");
+                return (0, HttpStatus_1.HttpStatus)(http2_1.constants.HTTP_STATUS_NOT_FOUND, "Not found");
             }
-            const { password, refresh_token } = user, userData = __rest(user, ["password", "refresh_token"]);
+            const _a = user._doc, { password, refresh_token } = _a, userData = __rest(_a, ["password", "refresh_token"]);
             return userData;
         });
     }
@@ -63,6 +63,14 @@ class UserServiceImpl {
         });
     }
     getOneByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_1.default.findOne({
+                email: email
+            });
+            return user;
+        });
+    }
+    removeAll() {
         return __awaiter(this, void 0, void 0, function* () {
             throw new Error("Method not implemented.");
         });

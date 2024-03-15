@@ -1,9 +1,9 @@
 import express, {Application} from "express"
 import cors from "cors"
-import mongoose from 'mongoose'
 import dotenv from "dotenv"
 import Routes from "./routes";
-import {errorHandler, notFound} from "./middleware/error.middleware";
+import {errorHandler, notFound} from "./middleware/error.middleware"
+import {Config} from "./config";
 
 dotenv.config()
 
@@ -11,9 +11,11 @@ export default class Server {
 
     private readonly app: Application
     private readonly PORT: number = Number(process.env.PORT) || 8000
+    private readonly configService: Config
 
     constructor(app: Application) {
         this.app = app
+        this.configService = new Config()
         this.config()
         new Routes(this.app)
     }
@@ -21,12 +23,9 @@ export default class Server {
     private config(): void {
         this.app.use(cors())
         this.app.use(express.json())
-        this.app.use(notFound)
+        // this.app.use(notFound)
         this.app.use(errorHandler)
-        mongoose
-            .connect(String(process.env.MONGODB_URI))
-            .then(() => console.log('Connected to mongodb'))
-            .catch((err) => console.log(err))
+        this.configService.connectToDB()
     }
 
     public start(): void {

@@ -5,19 +5,22 @@ import { UserResponseDTO } from "../../types/response/user.response.dto"
 import { UserService } from "../user.service"
 import Token from "../../utils/JwtToken"
 import { HttpStatus } from "../../utils/HttpStatus"
+import {constants as status} from "http2"
+import {TokenDto} from "../../types/dto/token.dto";
+
 
 
 const tokenService: Token = new Token() 
 
 export class UserServiceImpl implements UserService {
 
-    public async getOne(token: string): Promise<IError | UserResponseDTO> {
-        const id: string = tokenService.getData(token)
-        const user: any = userRepository.findById(id)
+    public async getCurrentUser(token: string): Promise<IError | UserResponseDTO> {
+        const tokenData: TokenDto = tokenService.getData(token)
+        const user: any = await userRepository.findById(tokenData.id)
         if (!user) {
-            return HttpStatus(404, "Not found")
+            return HttpStatus(status.HTTP_STATUS_NOT_FOUND, "Not found")
         }
-        const {password, refresh_token, ...userData} = user
+        const {password, refresh_token, ...userData} = user._doc
         return userData
     }
 
@@ -40,7 +43,13 @@ export class UserServiceImpl implements UserService {
     }
 
     public async getOneByEmail(email: string): Promise<UserResponseDTO | IError> {
+        const user: any = await userRepository.findOne({
+            email: email
+        })
+        return user;
+    }
 
+    public async removeAll(): Promise<void | IError> {
         throw new Error("Method not implemented.")
     }
 }
