@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode"
+import {jwtDecode} from "jwt-decode"
 import {UserDTO} from "../types/dto/user.dto"
 import jwt from 'jsonwebtoken'
 import {TokenDto} from "../types/dto/token.dto";
@@ -12,10 +12,10 @@ export default class Token {
                 id: user._id,
                 session: session
             },
-             String(process.env.ACCESS_TOKEN_SECRET)
-            // {
-            //     expiresIn: String(process.env.ACCESS_TOKEN_LIFE)
-            // }
+            String(process.env.ACCESS_TOKEN_SECRET),
+            {
+                expiresIn: String(process.env.ACCESS_TOKEN_LIFE)
+            }
         )
     }
 
@@ -34,6 +34,6 @@ export default class Token {
     public getData(token: string): TokenDto {
         const encoded: string = (token || "").replace(/Bearer\s?/, '')
         const decoded: TokenDto = jwtDecode(encoded)
-        return decoded 
+        return decoded
     }
 }

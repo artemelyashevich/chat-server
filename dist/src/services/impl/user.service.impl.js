@@ -28,11 +28,13 @@ const user_1 = __importDefault(require("../../entities/user"));
 const JwtToken_1 = __importDefault(require("../../utils/JwtToken"));
 const HttpStatus_1 = require("../../utils/HttpStatus");
 const http2_1 = require("http2");
-const tokenService = new JwtToken_1.default();
 class UserServiceImpl {
+    constructor() {
+        this.tokenService = new JwtToken_1.default();
+    }
     getCurrentUser(token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tokenData = tokenService.getData(token);
+            const tokenData = this.tokenService.getData(token);
             const user = yield user_1.default.findById(tokenData.id);
             if (!user) {
                 return (0, HttpStatus_1.HttpStatus)(http2_1.constants.HTTP_STATUS_NOT_FOUND, "Not found");

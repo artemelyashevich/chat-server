@@ -11,11 +11,9 @@ class Token {
         return jsonwebtoken_1.default.sign({
             id: user._id,
             session: session
-        }, String(process.env.ACCESS_TOKEN_SECRET)
-        // {
-        //     expiresIn: String(process.env.ACCESS_TOKEN_LIFE)
-        // }
-        );
+        }, String(process.env.ACCESS_TOKEN_SECRET), {
+            expiresIn: String(process.env.ACCESS_TOKEN_LIFE)
+        });
     }
     getRefreshToken(session) {
         return jsonwebtoken_1.default.sign({

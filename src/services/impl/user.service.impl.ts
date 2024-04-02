@@ -8,14 +8,16 @@ import { HttpStatus } from "../../utils/HttpStatus"
 import {constants as status} from "http2"
 import {TokenDto} from "../../types/dto/token.dto";
 
-
-
-const tokenService: Token = new Token() 
-
 export class UserServiceImpl implements UserService {
 
+    private readonly tokenService: Token
+
+    constructor() {
+        this.tokenService = new Token()
+    }
+
     public async getCurrentUser(token: string): Promise<IError | UserResponseDTO> {
-        const tokenData: TokenDto = tokenService.getData(token)
+        const tokenData: TokenDto = this.tokenService.getData(token)
         const user: any = await userRepository.findById(tokenData.id)
         if (!user) {
             return HttpStatus(status.HTTP_STATUS_NOT_FOUND, "Not found")

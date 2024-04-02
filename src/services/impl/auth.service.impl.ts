@@ -8,9 +8,13 @@ import Token from "../../utils/JwtToken"
 import { IToken } from "../../types/response/user.response.dto"
 import {UserDTO} from "../../types/dto/user.dto"
 
-const token = new Token()
-
 export class AuthServiceImpl implements AuthService {
+
+    private readonly token: Token
+
+    constructor() {
+        this.token = new Token()
+    }
 
     public async login(data: UserCreateDto): Promise<IToken | IError> {
         const user: UserDTO | undefined | null = await userRepository.findOne({
@@ -27,32 +31,32 @@ export class AuthServiceImpl implements AuthService {
             return HttpStatus(400, "Incorrect password");
         }
         const session: number = Math.random() * 1000;
-        return { accessToken: token.getAccessToken(user, session) };
+        return { accessToken: this.token.getAccessToken(user, session) };
     }
 
     public async register(data: UserCreateDto): Promise<IToken | IError> {
         const existingUser: UserDTO | undefined | null = await userRepository.findOne({
             email: data.email
-        });
+        })
         if (existingUser) {
             return HttpStatus(400, "User with such email already exists!");
         }
         const encryptedPassword: string = CryptoJs.AES.encrypt(
             data.password,
             String(process.env.CRYPTO_SECRET)
-        ).toString();
-        const session: number = Math.random() * 1000;
+        ).toString()
+        const session: number = Math.random() * 1000
         await userRepository.create({
             ...data,
             password: encryptedPassword,
-            refresh_token: token.getRefreshToken(session)
-        });
+            refresh_token: this.token.getRefreshToken(session)
+        })
         const newUser: UserDTO | undefined | null = await userRepository.findOne({
             email: data.email
-        });
+        })
         if (!newUser) {
-            return HttpStatus(500, "Failed to create user");
+            return HttpStatus(500, "Failed to create user")
         }
-        return { accessToken: token.getAccessToken(newUser, session) };
+        return { accessToken: this.token.getAccessToken(newUser, session) }
     }
 }

@@ -18,7 +18,7 @@ class AuthRoutes {
 
     private initializeRoutes(): void {
         this.router.post("/register", handleValidate, this.validator.signUpValidation, this.controller.register)
-        this.router.post("/login", handleValidate, this.validator.signInValidation, this.controller.login)
+        this.router.post("/login", this.controller.login)
     }
 
     public get gRouter(): Router {
