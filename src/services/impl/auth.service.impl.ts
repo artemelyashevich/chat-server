@@ -7,6 +7,9 @@ import CryptoJs from 'crypto-js'
 import Token from "../../utils/JwtToken"
 import { IToken } from "../../types/response/user.response.dto"
 import {UserDTO} from "../../types/dto/user.dto"
+import {config} from "dotenv"
+
+config()
 
 export class AuthServiceImpl implements AuthService {
 

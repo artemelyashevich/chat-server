@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express"
 
+// @TODO: implements error handling
 export const notFound = (req: Request, res: Response, next: NextFunction): void => {
     const error: Error = new Error(`Not Found - ${req.originalUrl}`)
     res.status(404)
