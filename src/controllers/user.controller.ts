@@ -6,7 +6,6 @@ import {ResponseBody} from "../types/response/response.type"
 import { IError } from "../types/error/error.type"
 import {constants as status} from "http2"
 
-
 const userService: UserService = new UserServiceImpl()
 
 export class UserController {

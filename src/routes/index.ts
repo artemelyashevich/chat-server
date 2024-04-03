@@ -2,7 +2,7 @@ import {Application} from "express"
 import authRoutes from "./auth.routes"
 import userRoutes from "./user.routes"
 import messageRoutes from "./message.routes";
-import chatRoutes from "./chat.routes";
+import roomRoutes from "./room.routes";
 
 export default class Routes {
     constructor(app: Application) {
@@ -11,7 +11,7 @@ export default class Routes {
             authRoutes,
             userRoutes,
             messageRoutes,
-            chatRoutes
+            roomRoutes
         )
     }
 }

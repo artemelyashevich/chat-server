@@ -34,6 +34,7 @@ const error_middleware_1 = require("./middleware/error.middleware");
 const config_1 = require("./config");
 const http = __importStar(require("http"));
 const socket_io_1 = __importDefault(require("socket.io"));
+const socket_service_impl_1 = require("./socket/impl/socket.service.impl");
 dotenv_1.default.config();
 class Server {
     constructor(app) {
@@ -47,7 +48,8 @@ class Server {
                 origin: String(process.env.ALLOWED_HOST)
             }
         });
-        this.onSocketConnect();
+        this.socketService = new socket_service_impl_1.SocketServiceImpl(this.io);
+        this.socketService.onSocketConnect();
         new routes_1.default(this.app);
     }
     config() {
@@ -55,18 +57,11 @@ class Server {
             origin: String(process.env.ALLOWED_HOST)
         }));
         this.app.use(express_1.default.json());
-        // this.app.use(notFound)
         this.app.use(error_middleware_1.errorHandler);
         this.configService.connectToDB();
     }
     start() {
         this.server.listen(this.PORT, () => console.log(`http://localhost:${this.PORT}`));
-    }
-    onSocketConnect() {
-        this.io.on("connection", (socket) => {
-            console.log("User connected");
-            socket.on("send_message", (message) => console.log("TEXT: ", message));
-        });
     }
 }
 exports.default = Server;

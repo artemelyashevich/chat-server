@@ -1,12 +1,12 @@
 import mongoose, {model, Schema} from "mongoose"
 
-const chatSchema = new Schema(
+const roomSchema = new Schema(
     {
-        chatName: {
+        roomName: {
             type: String,
             trim: true
         },
-        isGroupChat: {
+        isGroupRoom: {
             type: Boolean,
             default: false
         },
@@ -30,4 +30,4 @@ const chatSchema = new Schema(
     }
 )
 
-export default model<any>("Chats", chatSchema)
+export default model<any>("Rooms", roomSchema)

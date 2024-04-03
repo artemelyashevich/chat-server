@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)();
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -18,7 +20,7 @@ const userSchema = new mongoose_1.Schema({
     image: {
         type: String,
         required: true,
-        default: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+        default: process.env.DEFAULT_IMAGE_URL
     },
     isAdmin: {
         type: Boolean,

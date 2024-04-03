@@ -6,7 +6,8 @@ import {errorHandler, notFound} from "./middleware/error.middleware"
 import {Config} from "./config";
 import * as http from "http";
 import io from 'socket.io'
-import {log} from "node:util";
+import {SocketService} from "./socket/socket.service";
+import {SocketServiceImpl} from "./socket/impl/socket.service.impl";
 
 dotenv.config()
 
@@ -17,6 +18,7 @@ export default class Server {
     private readonly configService: Config
     private readonly server: http.Server
     private readonly io: io.Server
+    private readonly socketService: SocketService
 
     constructor(app: Application) {
         this.app = app
@@ -28,7 +30,8 @@ export default class Server {
                 origin: String(process.env.ALLOWED_HOST)
             }
         })
-        this.onSocketConnect()
+        this.socketService = new SocketServiceImpl(this.io)
+        this.socketService.onSocketConnect()
         new Routes(this.app)
     }
 
@@ -37,19 +40,11 @@ export default class Server {
             origin: String(process.env.ALLOWED_HOST)
         }))
         this.app.use(express.json())
-        // this.app.use(notFound)
         this.app.use(errorHandler)
         this.configService.connectToDB()
     }
 
     public start(): void {
         this.server.listen(this.PORT, () => console.log(`http://localhost:${this.PORT}`))
-    }
-
-    private onSocketConnect(): void {
-        this.io.on("connection", (socket) => {
-            console.log("User connected")
-            socket.on("send_message", (message: {text: string}) => console.log("TEXT: ", message))
-        })
     }
 }

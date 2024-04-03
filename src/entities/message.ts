@@ -11,9 +11,9 @@ const messageSchema = new Schema(
             type: String,
             trim: true
         },
-        chat: {
-            type: Schema.Types.ObjectId,
-            ref: "Chats"
+        roomId: {
+            type: String,
+            trim: true
         },
         readBy: [
             {

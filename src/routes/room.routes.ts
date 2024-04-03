@@ -1,19 +1,17 @@
 import {Router} from "express";
-import {ChatController} from "../controllers/chat.controller";
+import {RoomController} from "../controllers/room.controller";
 
-class ChatRoutes {
-
+class RoomRoutes {
     private readonly router: Router
-    private readonly controller: ChatController
+    private readonly controller: RoomController
 
     constructor() {
         this.router = Router()
-        this.controller = new ChatController()
+        this.controller = new RoomController()
         this.initializeRoutes()
     }
 
     private initializeRoutes(): void {
-
     }
 
     public get gRouter(): Router {
@@ -21,4 +19,4 @@ class ChatRoutes {
     }
 }
 
-export default new ChatRoutes().gRouter
+export default new RoomRoutes().gRouter

@@ -1,5 +1,8 @@
 import {Schema, model} from "mongoose"
-import {UserDTO} from "../types/dto/user.dto";
+import {UserDTO} from "../types/dto/user.dto"
+import {config} from "dotenv"
+
+config()
 
 const userSchema = new Schema<UserDTO>(
     {
@@ -19,7 +22,7 @@ const userSchema = new Schema<UserDTO>(
         image: {
             type: String,
             required: true,
-            default: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+            default: process.env.DEFAULT_IMAGE_URL
         },
         isAdmin: {
             type: Boolean,
