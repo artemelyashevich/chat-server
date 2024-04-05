@@ -1,27 +1,10 @@
-import mongoose, {model, Schema} from "mongoose"
+import mongoose, {model, Schema} from "mongoose";
+import {MessageDto} from "../types/dto/message.dto";
 
 const roomSchema = new Schema(
     {
-        roomName: {
+        title: {
             type: String,
-            trim: true
-        },
-        isGroupRoom: {
-            type: Boolean,
-            default: false
-        },
-        users: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Users"
-            }
-        ],
-        latestMessage: {
-            type: Schema.Types.ObjectId,
-            ref: "Messages"
-        },
-        groupAdmin: {
-            type: Schema.Types.ObjectId,
             ref: "Users"
         }
     },
@@ -30,4 +13,4 @@ const roomSchema = new Schema(
     }
 )
 
-export default model<any>("Rooms", roomSchema)
+export default model<MessageDto>("Rooms", roomSchema)

@@ -1,21 +1,31 @@
-import { RoomDto } from "../../types/dto/room.dto";
-import {RoomService} from "../room.service";
+import {RoomService} from "../room.service"
 import roomRepository from "../../entities/room"
+import {RoomDto} from "../../types/dto/room.dto"
 import {UserService} from "../user.service";
 import {UserServiceImpl} from "./user.service.impl";
 
 export class RoomServiceImpl implements RoomService {
+
     private readonly userService: UserService
 
     constructor() {
         this.userService = new UserServiceImpl()
     }
 
-    public async findRoomsByUser(token: string): Promise<RoomDto> {
-        // @ts-ignore
-        return await roomRepository.find({
-            users: await this.userService.getCurrentUser(token)
-        })
+    findRoomByTitle = async (title: string, token: string): Promise<RoomDto | null> => {
+        const user: any = await this.userService.getCurrentUser(token)
+        const cTitle = title + user._id
+        return roomRepository.findOne({
+            title: cTitle
+        });
     }
 
+    createRoom = async (title: string, token: string): Promise<RoomDto | null> => {
+        const user: any = await this.userService.getCurrentUser(token)
+        const cTitle = title + user._id
+        await roomRepository.create({title: cTitle})
+        return roomRepository.findOne({
+            title: cTitle
+        })
+    }
 }

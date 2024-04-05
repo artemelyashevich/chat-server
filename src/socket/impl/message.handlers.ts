@@ -21,7 +21,7 @@ export const messageHandlers = (io: io.Server, socket: io.Socket): void => {
         async (): Promise<void> => {
             try {
                 // @ts-ignore
-                messages[roomId] = await messageService.findByRoom(roomId)
+                messages[roomId] = await messageService.findByRoomId(roomId)
                 updateMessageList()
             } catch (e) {
                 console.log(e)

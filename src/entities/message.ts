@@ -12,15 +12,9 @@ const messageSchema = new Schema(
             trim: true
         },
         roomId: {
-            type: String,
-            trim: true
-        },
-        readBy: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Users"
-            }
-        ]
+            type: Schema.Types.ObjectId,
+            ref: "Rooms"
+        }
     },
     {
         timestamps: true

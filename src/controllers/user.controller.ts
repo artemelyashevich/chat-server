@@ -23,8 +23,6 @@ export class UserController {
 
     public async removeAllData(req: Request, res: Response): Promise<void> {
         const token: string = req.headers.authorization?.replace(/Bearer\s?/, "") || ""
-        console.log(`\t ${req.body}`)
-        //await userService.removeAll()
         res.status(status.HTTP_STATUS_NO_CONTENT)
     }
 }
