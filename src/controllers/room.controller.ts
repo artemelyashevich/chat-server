@@ -9,15 +9,23 @@ const roomService: RoomService = new RoomServiceImpl()
 export class RoomController {
     public async createRoom(req: Request, res: Response): Promise<void> {
         const token: string = req.headers.authorization?.replace(/Bearer\s?/, "") || ""
-        // @ts-ignore
-        const room = await roomService.createRoom(req.params, token)
+        const room = await roomService.createRoom(req.body.title)
+        res.status(status.HTTP_STATUS_CREATED).json(room)
+    }
+
+    public async getRoomByTitle(req: Request, res: Response): Promise<void> {
+        const room = await roomService.findRoomByTitle(req.params.title)
         res.status(status.HTTP_STATUS_CREATED).json(room)
     }
 
     public async getRoomById(req: Request, res: Response): Promise<void> {
+        const room = await roomService.findRoomById(req.params.id)
+        res.status(status.HTTP_STATUS_OK).json(room)
+    }
+
+    public async getRoomsByCurrentUser(req: Request, res: Response): Promise<void> {
         const token: string = req.headers.authorization?.replace(/Bearer\s?/, "") || ""
-        // @ts-ignore
-        const room = await roomService.findRoomByTitle(req.params, token)
-        res.status(status.HTTP_STATUS_CREATED).json(room)
+        const rooms = await roomService.findRoomsByCurrentUser(token)
+        res.status(status.HTTP_STATUS_OK).json(rooms)
     }
 }

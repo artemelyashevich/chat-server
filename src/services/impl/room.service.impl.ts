@@ -3,6 +3,8 @@ import roomRepository from "../../entities/room"
 import {RoomDto} from "../../types/dto/room.dto"
 import {UserService} from "../user.service";
 import {UserServiceImpl} from "./user.service.impl";
+import {UserResponseDTO} from "../../types/response/user.response.dto";
+import {IError} from "../../types/error/error.type";
 
 export class RoomServiceImpl implements RoomService {
 
@@ -12,20 +14,30 @@ export class RoomServiceImpl implements RoomService {
         this.userService = new UserServiceImpl()
     }
 
-    findRoomByTitle = async (title: string, token: string): Promise<RoomDto | null> => {
-        const user: any = await this.userService.getCurrentUser(token)
-        const cTitle = title + user._id
-        return roomRepository.findOne({
-            title: cTitle
-        });
+    findRoomsByCurrentUser = async (token: string): Promise<RoomDto[] | null> => {
+        const user: UserResponseDTO | IError = await this.userService.getCurrentUser(token)
+        return await roomRepository.find({
+            'usersId': {
+                // @ts-ignore
+                $in: user._id
+            }
+        })
     }
 
-    createRoom = async (title: string, token: string): Promise<RoomDto | null> => {
-        const user: any = await this.userService.getCurrentUser(token)
-        const cTitle = title + user._id
-        await roomRepository.create({title: cTitle})
+    findRoomById = async (id: string): Promise<RoomDto | null> => {
+        return await roomRepository.findById(id)
+    }
+
+    findRoomByTitle = async (title: string): Promise<RoomDto | null> => {
+        return await roomRepository.findOne({
+            title: title
+        })
+    }
+
+    createRoom = async (title: string): Promise<RoomDto | null> => {
+        await roomRepository.create({title: title})
         return roomRepository.findOne({
-            title: cTitle
+            title: title
         })
     }
 }

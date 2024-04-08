@@ -32,8 +32,6 @@ class UserController {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const token = ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace(/Bearer\s?/, "")) || "";
-            console.log(`\t ${req.body}`);
-            //await userService.removeAll()
             res.status(http2_1.constants.HTTP_STATUS_NO_CONTENT);
         });
     }

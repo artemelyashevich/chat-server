@@ -16,8 +16,10 @@ class RoomRoutes {
     }
 
     private initializeRoutes(): void {
-        this.router.get("/room", this.auth.tokenRequire, this.controller.getRoomById)
+        this.router.get("/room/:title", this.auth.tokenRequire, this.controller.getRoomByTitle)
         this.router.post("/room", this.auth.tokenRequire, this.controller.createRoom)
+        this.router.get("/room", this.auth.tokenRequire, this.controller.getRoomsByCurrentUser)
+        this.router.get("/rooms/:id", this.auth.tokenRequire, this.controller.getRoomById)
     }
 
     public get gRouter(): Router {
