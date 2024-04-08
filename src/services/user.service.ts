@@ -13,5 +13,7 @@ export interface UserService {
 
     getCurrentUser(token: string): Promise<UserResponseDTO | IError>
 
+    searchUserByName(query: string): Promise<UserResponseDTO[] | IError>
+
     removeAll(): Promise<void | IError>
 }

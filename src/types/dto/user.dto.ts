@@ -3,7 +3,6 @@ export interface UserDTO {
     name: string,
     email: string,
     image?: string,
-    isAdmin?: boolean,
     refresh_token?: string,
     password?: string,
     createdAt?: boolean | string,

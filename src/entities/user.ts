@@ -24,11 +24,6 @@ const userSchema = new Schema<UserDTO>(
             required: true,
             default: process.env.DEFAULT_IMAGE_URL
         },
-        isAdmin: {
-            type: Boolean,
-            required: true,
-            default: false,
-        },
         refresh_token: {
             type: String,
             required: true

@@ -34,10 +34,10 @@ export class RoomServiceImpl implements RoomService {
         })
     }
 
-    createRoom = async (title: string): Promise<RoomDto | null> => {
-        await roomRepository.create({title: title})
+    createRoom = async (roomDto: RoomDto): Promise<RoomDto | null> => {
+        await roomRepository.create(roomDto)
         return roomRepository.findOne({
-            title: title
+            title: roomDto.title
         })
     }
 }

@@ -32,6 +32,9 @@ class UserServiceImpl {
     constructor() {
         this.tokenService = new JwtToken_1.default();
     }
+    searchUserByName(query) {
+        throw new Error("Method not implemented.");
+    }
     getCurrentUser(token) {
         return __awaiter(this, void 0, void 0, function* () {
             const tokenData = this.tokenService.getData(token);

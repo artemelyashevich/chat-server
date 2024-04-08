@@ -16,6 +16,10 @@ export class UserServiceImpl implements UserService {
         this.tokenService = new Token()
     }
 
+    searchUserByName(query: string): Promise<IError | UserResponseDTO[]> {
+        throw new Error("Method not implemented.")
+    }
+
     public async getCurrentUser(token: string): Promise<IError | UserResponseDTO> {
         const tokenData: TokenDto = this.tokenService.getData(token)
         const user: any = await userRepository.findById(tokenData.id)

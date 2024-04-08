@@ -5,7 +5,8 @@ const roomSchema = new Schema(
     {
         title: {
             type: String,
-            ref: "Users"
+            ref: "Users",
+            unique: true
         },
         usersId: [
             {

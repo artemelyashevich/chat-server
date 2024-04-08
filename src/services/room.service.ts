@@ -7,5 +7,5 @@ export interface RoomService {
 
     findRoomsByCurrentUser(token: string): Promise<RoomDto[] | null>
 
-    createRoom(title: string): Promise<RoomDto | null>
+    createRoom(roomDto: RoomDto): Promise<RoomDto | null>
 }
