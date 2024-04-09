@@ -11,8 +11,9 @@ class UserRoutes {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.get("/users", this.controller.getAll);
-        this.router.get("/user", this.controller.getCurrentUser);
+        this.router.get("/users", this.auth.tokenRequire, this.controller.getAll);
+        this.router.get("/user", this.auth.tokenRequire, this.controller.getCurrentUser);
+        this.router.get("/user/:query", this.auth.tokenRequire, this.controller.searchUsers);
         this.router.delete("/users", this.auth.tokenRequire, this.controller.removeAllData);
     }
     get gRouter() {

@@ -17,7 +17,7 @@ export class RoomServiceImpl implements RoomService {
     findRoomsByCurrentUser = async (token: string): Promise<RoomDto[] | null> => {
         const user: UserResponseDTO | IError = await this.userService.getCurrentUser(token)
         return await roomRepository.find({
-            'usersId': {
+            'creatorId': {
                 // @ts-ignore
                 $in: user._id
             }

@@ -29,4 +29,5 @@ const userSchema = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
+userSchema.index({ name: "text", email: "text" });
 exports.default = (0, mongoose_1.model)("Users", userSchema);

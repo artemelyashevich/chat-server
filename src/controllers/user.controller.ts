@@ -21,6 +21,12 @@ export class UserController {
         res.status(status.HTTP_STATUS_OK).json(user)
     }
 
+    public async searchUsers(req: Request, res: ResponseBody<UserResponseDTO[] | IError>): Promise<void> {
+        // @ts-ignore
+        const users = await userService.searchUserByName(req.params.query)
+        res.status(status.HTTP_STATUS_OK).json(users)
+    }
+
     public async removeAllData(req: Request, res: Response): Promise<void> {
         const token: string = req.headers.authorization?.replace(/Bearer\s?/, "") || ""
         res.status(status.HTTP_STATUS_NO_CONTENT)

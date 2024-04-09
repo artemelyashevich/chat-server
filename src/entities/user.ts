@@ -34,4 +34,6 @@ const userSchema = new Schema<UserDTO>(
     }
 )
 
+userSchema.index({name: "text", email: "text"})
+
 export default model<UserDTO>("Users", userSchema)

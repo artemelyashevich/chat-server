@@ -28,6 +28,13 @@ class UserController {
             res.status(http2_1.constants.HTTP_STATUS_OK).json(user);
         });
     }
+    searchUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // @ts-ignore
+            const users = yield userService.searchUserByName(req.params.query);
+            res.status(http2_1.constants.HTTP_STATUS_OK).json(users);
+        });
+    }
     removeAllData(req, res) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {

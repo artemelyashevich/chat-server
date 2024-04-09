@@ -33,7 +33,15 @@ class UserServiceImpl {
         this.tokenService = new JwtToken_1.default();
     }
     searchUserByName(query) {
-        throw new Error("Method not implemented.");
+        return __awaiter(this, void 0, void 0, function* () {
+            return user_1.default.find({
+                "$or": [
+                    {
+                        name: { $regex: query }
+                    }
+                ]
+            });
+        });
     }
     getCurrentUser(token) {
         return __awaiter(this, void 0, void 0, function* () {

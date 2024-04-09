@@ -15,7 +15,7 @@ export class AuthController {
     }
 
     public async login(req: Request, res: ResponseBody<IToken | IError>): Promise<void> {
-        const token: IToken | IError | undefined = await authService.register(req.body)
+        const token: IToken | IError | undefined = await authService.login(req.body)
         // @ts-ignore
         if (token.status) {
             // @ts-ignore

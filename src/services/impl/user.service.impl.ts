@@ -1,10 +1,10 @@
-import { IError } from "../../types/error/error.type"
-import { UserCreateDto } from "../../types/request/user.request.dto"
+import {IError} from "../../types/error/error.type"
+import {UserCreateDto} from "../../types/request/user.request.dto"
 import userRepository from "../../entities/user"
-import { UserResponseDTO } from "../../types/response/user.response.dto"
-import { UserService } from "../user.service"
+import {UserResponseDTO} from "../../types/response/user.response.dto"
+import {UserService} from "../user.service"
 import Token from "../../utils/JwtToken"
-import { HttpStatus } from "../../utils/HttpStatus"
+import {HttpStatus} from "../../utils/HttpStatus"
 import {constants as status} from "http2"
 import {TokenDto} from "../../types/dto/token.dto";
 
@@ -16,8 +16,16 @@ export class UserServiceImpl implements UserService {
         this.tokenService = new Token()
     }
 
-    searchUserByName(query: string): Promise<IError | UserResponseDTO[]> {
-        throw new Error("Method not implemented.")
+    public async searchUserByName(query: string): Promise<IError | UserResponseDTO[]> {
+        return userRepository.find(
+            {
+                "$or": [
+                    {
+                        name: {$regex: query}
+                    }
+                ]
+            }
+        )
     }
 
     public async getCurrentUser(token: string): Promise<IError | UserResponseDTO> {
@@ -40,7 +48,7 @@ export class UserServiceImpl implements UserService {
 
     public async getAll(): Promise<UserResponseDTO[]> {
         const users: any = await userRepository.find()
-        const res: any = []        
+        const res: any = []
         users.forEach((user: { [x: string]: any; password: any; refresh_token: any; }) => {
             let {password, refresh_token, ...userData} = user._doc
             res.push(userData)
