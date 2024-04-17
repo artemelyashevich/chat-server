@@ -53,9 +53,9 @@ class Server {
         new routes_1.default(this.app);
     }
     config() {
-        this.app.use((0, cors_1.default)({
+        this.app.use((0, cors_1.default)( /*{
             origin: String(process.env.ALLOWED_HOST)
-        }));
+        }*/));
         this.app.use(express_1.default.json());
         this.app.use(error_middleware_1.errorHandler);
         this.configService.connectToDB();

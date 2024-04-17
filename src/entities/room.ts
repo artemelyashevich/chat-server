@@ -10,8 +10,10 @@ const roomSchema = new Schema(
         },
         usersId: [
             {
-                type: Schema.Types.ObjectId,
-                ref: "Users"
+                userId: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Users"
+                }
             }
         ],
         creatorId: {

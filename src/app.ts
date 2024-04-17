@@ -36,9 +36,9 @@ export default class Server {
     }
 
     private config(): void {
-        this.app.use(cors({
+        this.app.use(cors(/*{
             origin: String(process.env.ALLOWED_HOST)
-        }))
+        }*/))
         this.app.use(express.json())
         this.app.use(errorHandler)
         this.configService.connectToDB()
