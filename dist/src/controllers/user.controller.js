@@ -14,32 +14,31 @@ const user_service_impl_1 = require("../services/impl/user.service.impl");
 const http2_1 = require("http2");
 const userService = new user_service_impl_1.UserServiceImpl();
 class UserController {
-    getAll(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor() {
+        this.getAll = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const users = yield userService.getAll();
             res.status(http2_1.constants.HTTP_STATUS_OK).json(users);
         });
-    }
-    getCurrentUser(req, res) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
+        this.getCurrentUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const token = ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace(/Bearer\s?/, "")) || "";
             const user = yield userService.getCurrentUser(token);
             res.status(http2_1.constants.HTTP_STATUS_OK).json(user);
         });
-    }
-    searchUsers(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.searchUsers = (req, res) => __awaiter(this, void 0, void 0, function* () {
             // @ts-ignore
             const users = yield userService.searchUserByName(req.params.query);
             res.status(http2_1.constants.HTTP_STATUS_OK).json(users);
         });
-    }
-    removeAllData(req, res) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            const token = ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace(/Bearer\s?/, "")) || "";
+        this.removeAllData = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            var _b;
+            const token = ((_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.replace(/Bearer\s?/, "")) || "";
             res.status(http2_1.constants.HTTP_STATUS_NO_CONTENT);
+        });
+        this.editUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            var _c;
+            const token = ((_c = req.headers.authorization) === null || _c === void 0 ? void 0 : _c.replace(/Bearer\s?/, "")) || "";
+            const user = yield userService.edit(token, req.body);
         });
     }
 }

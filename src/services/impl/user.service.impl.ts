@@ -16,8 +16,8 @@ export class UserServiceImpl implements UserService {
         this.tokenService = new Token()
     }
 
-    public async searchUserByName(query: string): Promise<IError | UserResponseDTO[]> {
-        return userRepository.find(
+    public searchUserByName = async (query: string): Promise<IError | UserResponseDTO[]> => {
+        const user = await userRepository.find(
             {
                 "$or": [
                     {
@@ -26,9 +26,10 @@ export class UserServiceImpl implements UserService {
                 ]
             }
         )
+        return user
     }
 
-    public async getCurrentUser(token: string): Promise<IError | UserResponseDTO> {
+    public getCurrentUser = async (token: string): Promise<IError | UserResponseDTO> => {
         const tokenData: TokenDto = this.tokenService.getData(token)
         const user: any = await userRepository.findById(tokenData.id)
         if (!user) {
@@ -38,15 +39,20 @@ export class UserServiceImpl implements UserService {
         return userData
     }
 
-    public async remove(id: number): Promise<void | IError> {
+    public remove = async (id: number): Promise<void | IError> => {
         throw new Error("Method not implemented.")
     }
 
-    public async edit(data: UserCreateDto): Promise<UserResponseDTO | IError> {
-        throw new Error("Method not implemented.")
+    public edit = async (token: string, data: UserCreateDto): Promise<UserResponseDTO | IError> => {
+        const user = await this.getCurrentUser(token)
+        await userRepository.updateOne({
+            // @ts-ignore
+            _id: user?._id
+        }, data)
+        return await this.getCurrentUser(token)
     }
 
-    public async getAll(): Promise<UserResponseDTO[]> {
+    public getAll = async (): Promise<UserResponseDTO[]> => {
         const users: any = await userRepository.find()
         const res: any = []
         users.forEach((user: { [x: string]: any; password: any; refresh_token: any; }) => {
@@ -56,14 +62,14 @@ export class UserServiceImpl implements UserService {
         return res
     }
 
-    public async getOneByEmail(email: string): Promise<UserResponseDTO | IError> {
+    public getOneByEmail = async (email: string): Promise<UserResponseDTO | IError> => {
         const user: any = await userRepository.findOne({
             email: email
         })
         return user;
     }
 
-    public async removeAll(): Promise<void | IError> {
+    public removeAll = async (): Promise<void | IError> => {
         throw new Error("Method not implemented.")
     }
 }

@@ -16,21 +16,24 @@ export class RoomServiceImpl implements RoomService {
 
     findRoomsByCurrentUser = async (token: string): Promise<RoomDto[] | null> => {
         const user: UserResponseDTO | IError = await this.userService.getCurrentUser(token)
-        return await roomRepository.find({
+        const users = await roomRepository.find({
             usersId: {
                 // @ts-ignore
                 $elemMatch: {userId: user._id}
             }
         })
+        return users
     }
     findRoomById = async (id: string): Promise<RoomDto | null> => {
-        return await roomRepository.findById(id)
+        const user =  await roomRepository.findById(id)
+        return user
     }
 
     findRoomByTitle = async (title: string): Promise<RoomDto | null> => {
-        return await roomRepository.findOne({
+        const user = await roomRepository.findOne({
             title: title
         })
+        return user
     }
 
     createRoom = async (roomDto: RoomDto): Promise<RoomDto | null> => {

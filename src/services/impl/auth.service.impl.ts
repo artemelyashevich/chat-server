@@ -5,7 +5,7 @@ import {HttpStatus} from "../../utils/HttpStatus"
 import {IError} from "../../types/error/error.type"
 import CryptoJs from 'crypto-js'
 import Token from "../../utils/JwtToken"
-import { IToken } from "../../types/response/user.response.dto"
+import {IToken} from "../../types/response/user.response.dto"
 import {UserDTO} from "../../types/dto/user.dto"
 import {config} from "dotenv"
 
@@ -19,7 +19,7 @@ export class AuthServiceImpl implements AuthService {
         this.token = new Token()
     }
 
-    public async login(data: UserCreateDto): Promise<IToken | IError> {
+    public login = async (data: UserCreateDto): Promise<IToken | IError> => {
         const user: UserDTO | undefined | null = await userRepository.findOne({
             email: data.email
         });
@@ -34,10 +34,10 @@ export class AuthServiceImpl implements AuthService {
             return HttpStatus(400, "Incorrect password");
         }
         const session: number = Math.random() * 1000;
-        return { accessToken: this.token.getAccessToken(user, session) };
+        return {accessToken: this.token.getAccessToken(user, session)};
     }
 
-    public async register(data: UserCreateDto): Promise<IToken | IError> {
+    public register = async (data: UserCreateDto): Promise<IToken | IError> => {
         const existingUser: UserDTO | undefined | null = await userRepository.findOne({
             email: data.email
         })
@@ -60,6 +60,6 @@ export class AuthServiceImpl implements AuthService {
         if (!newUser) {
             return HttpStatus(500, "Failed to create user")
         }
-        return { accessToken: this.token.getAccessToken(newUser, session) }
+        return {accessToken: this.token.getAccessToken(newUser, session)}
     }
 }

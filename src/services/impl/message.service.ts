@@ -4,18 +4,18 @@ import messageRepository from "../../entities/message"
 
 
 export class MessageServiceImpl implements MessageService {
-    public async findByRoomId(roomId: string): Promise<MessageDto[]> {
+    public findByRoomId = async (roomId: string): Promise<MessageDto[]> => {
         return messageRepository.find({
             roomId
         })
     }
-    public async create(messageDto: MessageDto): Promise<MessageDto> {
+    public create = async (messageDto: MessageDto): Promise<MessageDto> => {
         return await messageRepository.create({
             ...messageDto
         })
     }
 
-    public async remove(id: string): Promise<void> {
+    public remove = async (id: string): Promise<void> => {
         try {
             await messageRepository.deleteOne({_id: id})
         }

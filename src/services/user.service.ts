@@ -5,7 +5,7 @@ import { UserResponseDTO } from "../types/response/user.response.dto"
 export interface UserService {
     remove(id: number): Promise<void | IError>
 
-    edit(data: UserCreateDto): Promise<UserResponseDTO | IError>
+    edit(token: string, data: UserCreateDto): Promise<UserResponseDTO | IError>
 
     getAll(): Promise<UserResponseDTO[]>
 

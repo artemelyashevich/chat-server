@@ -30,21 +30,17 @@ const HttpStatus_1 = require("../../utils/HttpStatus");
 const http2_1 = require("http2");
 class UserServiceImpl {
     constructor() {
-        this.tokenService = new JwtToken_1.default();
-    }
-    searchUserByName(query) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return user_1.default.find({
+        this.searchUserByName = (query) => __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_1.default.find({
                 "$or": [
                     {
                         name: { $regex: query }
                     }
                 ]
             });
+            return user;
         });
-    }
-    getCurrentUser(token) {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.getCurrentUser = (token) => __awaiter(this, void 0, void 0, function* () {
             const tokenData = this.tokenService.getData(token);
             const user = yield user_1.default.findById(tokenData.id);
             if (!user) {
@@ -53,19 +49,18 @@ class UserServiceImpl {
             const _a = user._doc, { password, refresh_token } = _a, userData = __rest(_a, ["password", "refresh_token"]);
             return userData;
         });
-    }
-    remove(id) {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.remove = (id) => __awaiter(this, void 0, void 0, function* () {
             throw new Error("Method not implemented.");
         });
-    }
-    edit(data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            throw new Error("Method not implemented.");
+        this.edit = (token, data) => __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.getCurrentUser(token);
+            yield user_1.default.updateOne({
+                // @ts-ignore
+                _id: user === null || user === void 0 ? void 0 : user._id
+            }, data);
+            return yield this.getCurrentUser(token);
         });
-    }
-    getAll() {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.getAll = () => __awaiter(this, void 0, void 0, function* () {
             const users = yield user_1.default.find();
             const res = [];
             users.forEach((user) => {
@@ -74,19 +69,16 @@ class UserServiceImpl {
             });
             return res;
         });
-    }
-    getOneByEmail(email) {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.getOneByEmail = (email) => __awaiter(this, void 0, void 0, function* () {
             const user = yield user_1.default.findOne({
                 email: email
             });
             return user;
         });
-    }
-    removeAll() {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.removeAll = () => __awaiter(this, void 0, void 0, function* () {
             throw new Error("Method not implemented.");
         });
+        this.tokenService = new JwtToken_1.default();
     }
 }
 exports.UserServiceImpl = UserServiceImpl;
