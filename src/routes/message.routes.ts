@@ -13,7 +13,7 @@ class MessageRoutes {
         this.initializeRoutes()
     }
 
-    private initializeRoutes(): void {
+    private initializeRoutes = (): void => {
     }
 
     public get gRouter(): Router {

@@ -15,7 +15,7 @@ class UserRoutes {
         this.initializeRoutes()
     }
 
-    private initializeRoutes(): void {
+    private initializeRoutes = (): void => {
         this.router.get("/users", this.auth.tokenRequire, this.controller.getAll)
         this.router.get("/user", this.auth.tokenRequire, this.controller.getCurrentUser)
         this.router.get("/user/:query", this.auth.tokenRequire, this.controller.searchUsers)

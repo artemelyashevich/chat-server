@@ -9,7 +9,7 @@ export const userHandlers = (io: io.Server, socket: io.Socket): void => {
         // @ts-ignore
         users[roomId] = []
     }
-    const updateUserList = () => {
+    const updateUserList = (): void => {
         // @ts-ignore
         io.to(roomId).emit('user_list:update', users[roomId])
     }

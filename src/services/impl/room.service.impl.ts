@@ -5,6 +5,8 @@ import {UserService} from "../user.service";
 import {UserServiceImpl} from "./user.service.impl";
 import {UserResponseDTO} from "../../types/response/user.response.dto";
 import {IError} from "../../types/error/error.type";
+import {HttpStatus} from "../../utils/HttpStatus";
+import {constants as status} from "http2"
 
 export class RoomServiceImpl implements RoomService {
 
@@ -16,28 +18,29 @@ export class RoomServiceImpl implements RoomService {
 
     findRoomsByCurrentUser = async (token: string): Promise<RoomDto[] | null> => {
         const user: UserResponseDTO | IError = await this.userService.getCurrentUser(token)
-        const users = await roomRepository.find({
+        return  roomRepository.find({
             usersId: {
                 // @ts-ignore
                 $elemMatch: {userId: user._id}
             }
         })
-        return users
     }
     findRoomById = async (id: string): Promise<RoomDto | null> => {
-        const user =  await roomRepository.findById(id)
-        return user
+        return roomRepository.findById(id)
     }
 
     findRoomByTitle = async (title: string): Promise<RoomDto | null> => {
-        const user = await roomRepository.findOne({
+        return roomRepository.findOne({
             title: title
         })
-        return user
     }
 
-    createRoom = async (roomDto: RoomDto): Promise<RoomDto | null> => {
-        await roomRepository.create(roomDto)
+    createRoom = async (roomDto: RoomDto): Promise<RoomDto | null | IError> => {
+        try {
+            await roomRepository.create(roomDto)
+        } catch (e) {
+            return HttpStatus(status.HTTP_STATUS_INTERNAL_SERVER_ERROR, 'Something went wrong...')
+        }
         return roomRepository.findOne({
             title: roomDto.title
         })

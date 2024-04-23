@@ -16,7 +16,7 @@ class AuthRoutes {
         this.initializeRoutes()
     }
 
-    private initializeRoutes(): void {
+    private initializeRoutes = (): void => {
         this.router.post("/register", handleValidate, this.validator.signUpValidation, this.controller.register)
         this.router.post("/login", this.controller.login)
     }

@@ -15,7 +15,7 @@ class RoomRoutes {
         this.initializeRoutes()
     }
 
-    private initializeRoutes(): void {
+    private initializeRoutes = (): void => {
         this.router.get("/room/:title", this.auth.tokenRequire, this.controller.getRoomByTitle)
         this.router.post("/room", this.auth.tokenRequire, this.controller.createRoom)
         this.router.get("/room", this.auth.tokenRequire, this.controller.getRoomsByCurrentUser)

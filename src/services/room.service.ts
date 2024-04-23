@@ -1,4 +1,5 @@
 import {RoomDto} from "../types/dto/room.dto";
+import {IError} from "../types/error/error.type";
 
 export interface RoomService {
     findRoomById(id: string): Promise<RoomDto | null>
@@ -7,5 +8,5 @@ export interface RoomService {
 
     findRoomsByCurrentUser(token: string): Promise<RoomDto[] | null>
 
-    createRoom(roomDto: RoomDto): Promise<RoomDto | null>
+    createRoom(roomDto: RoomDto): Promise<RoomDto | null | IError>
 }

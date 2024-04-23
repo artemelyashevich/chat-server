@@ -26,15 +26,21 @@ export class AuthServiceImpl implements AuthService {
         if (!user) {
             return HttpStatus(404, "User with such email doesn't exist!");
         }
-        const decryptedPassword: string = CryptoJs.AES.decrypt(
-            String(user.password),
-            String(process.env.CRYPTO_SECRET)
-        ).toString(CryptoJs.enc.Utf8);
-        if (decryptedPassword !== data.password) {
-            return HttpStatus(400, "Incorrect password");
+        try {
+            const decryptedPassword: string = CryptoJs.AES.decrypt(
+                String(user.password),
+                String(process.env.CRYPTO_SECRET)
+            ).toString(CryptoJs.enc.Utf8);
+            if (decryptedPassword !== data.password) {
+                return HttpStatus(400, "Incorrect password");
+            }
+            const session: number = Math.random() * 1000;
+            return {accessToken: this.token.getAccessToken(user, session)};
         }
-        const session: number = Math.random() * 1000;
-        return {accessToken: this.token.getAccessToken(user, session)};
+        catch (e) {
+            console.log(e)
+            return HttpStatus(500, "Something went wrong...");
+        }
     }
 
     public register = async (data: UserCreateDto): Promise<IToken | IError> => {
@@ -49,17 +55,23 @@ export class AuthServiceImpl implements AuthService {
             String(process.env.CRYPTO_SECRET)
         ).toString()
         const session: number = Math.random() * 1000
-        await userRepository.create({
-            ...data,
-            password: encryptedPassword,
-            refresh_token: this.token.getRefreshToken(session)
-        })
-        const newUser: UserDTO | undefined | null = await userRepository.findOne({
-            email: data.email
-        })
-        if (!newUser) {
-            return HttpStatus(500, "Failed to create user")
+        try {
+            await userRepository.create({
+                ...data,
+                password: encryptedPassword,
+                refresh_token: this.token.getRefreshToken(session)
+            })
+            const newUser: UserDTO | undefined | null = await userRepository.findOne({
+                email: data.email
+            })
+            if (!newUser) {
+                return HttpStatus(500, "Failed to create user")
+            }
+            return {accessToken: this.token.getAccessToken(newUser, session)}
         }
-        return {accessToken: this.token.getAccessToken(newUser, session)}
+        catch (e) {
+            console.log(e)
+            return HttpStatus(500, "Something went wrong...")
+        }
     }
 }

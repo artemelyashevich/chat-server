@@ -12,7 +12,7 @@ dotenv.config()
 const userService: UserService = new UserServiceImpl()
 
 export class AuthMiddleware {
-    public tokenRequire(req: Request, res: Response, next: NextFunction) {
+    public tokenRequire = (req: Request, res: Response, next: NextFunction) => {
         const bearerToken: string | undefined = req.headers.authorization?.replace(/Bearer\s?/, "")
 
         if (!bearerToken) {
@@ -29,7 +29,7 @@ export class AuthMiddleware {
         }
     }
 
-    public async adminRequire(req: Request, res: Response, next: NextFunction) {
+    public adminRequire = async (req: Request, res: Response, next: NextFunction) =>  {
         const bearerToken: string | undefined = req.headers.authorization?.replace(/Bearer\s?/, "")
         if (!bearerToken) {
             return res.status(401).json({message: "Unauthorized"})

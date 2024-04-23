@@ -17,7 +17,7 @@ export class UserServiceImpl implements UserService {
     }
 
     public searchUserByName = async (query: string): Promise<IError | UserResponseDTO[]> => {
-        const user = await userRepository.find(
+        return userRepository.find(
             {
                 "$or": [
                     {
@@ -26,7 +26,6 @@ export class UserServiceImpl implements UserService {
                 ]
             }
         )
-        return user
     }
 
     public getCurrentUser = async (token: string): Promise<IError | UserResponseDTO> => {
@@ -45,10 +44,17 @@ export class UserServiceImpl implements UserService {
 
     public edit = async (token: string, data: UserCreateDto): Promise<UserResponseDTO | IError> => {
         const user = await this.getCurrentUser(token)
-        await userRepository.updateOne({
-            // @ts-ignore
-            _id: user?._id
-        }, data)
+        if (!user) {
+            return HttpStatus(status.HTTP_STATUS_NOT_FOUND, 'Not found')
+        }
+        try {
+            await userRepository.updateOne({
+                // @ts-ignore
+                _id: user?._id
+            }, data)
+        } catch (e) {
+            return HttpStatus(status.HTTP_STATUS_INTERNAL_SERVER_ERROR, 'Something went wrong...')
+        }
         return await this.getCurrentUser(token)
     }
 
